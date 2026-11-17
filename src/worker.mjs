@@ -1,16 +1,17 @@
 import { execFile } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
-import { resolveOrcaCliPath } from './orca-cli-path.mjs'
+import { resolveOrcaCliEnvironment, resolveOrcaCliPath } from './orca-cli-path.mjs'
 import { focusedTarget } from './worktree/focus.ts'
 import { openNoteLink } from './worktree/note-link-routing.ts'
 
 // Use this installation's CLI: the plugin context API omits the focused workspace ID.
 const cli = resolveOrcaCliPath()
+const cliEnv = resolveOrcaCliEnvironment()
 const worktreeArgs = ['worktree', 'ps', '--environment', 'local', '--limit', '10000', '--json']
 function execute(args) {
   return new Promise((resolve, reject) => {
-    execFile(cli, args, { encoding: 'utf8', timeout: 15000, maxBuffer: 16 * 1024 * 1024 },
+    execFile(cli, args, { env: cliEnv, encoding: 'utf8', timeout: 15000, maxBuffer: 16 * 1024 * 1024 },
       (error, stdout) => error ? reject(new Error(stdout || error.message)) : resolve(stdout))
   })
 }
@@ -47,7 +48,7 @@ export default function activate(orca) {
   orca.panels.handle('notes.devStatus', () => {
     devStatus ??= new Promise(resolve => {
       execFile(cli, ['plugin', 'dev', 'request', root, 'notes.devProbe', '--environment', 'local', '--timeout-ms', '3000', '--json'], {
-        encoding: 'utf8', timeout: 5000, maxBuffer: 64 * 1024
+        env: cliEnv, encoding: 'utf8', timeout: 5000, maxBuffer: 64 * 1024
       }, (error, stdout) => resolve(error ? null : isOwnDevResponse(stdout, token)))
     })
     return devStatus
