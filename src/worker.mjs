@@ -1,11 +1,12 @@
 import { execFile } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
+import { resolveOrcaCliPath } from './orca-cli-path.mjs'
 import { focusedTarget } from './worktree/focus.ts'
 import { openNoteLink } from './worktree/note-link-routing.ts'
 
 // Use this installation's CLI: the plugin context API omits the focused workspace ID.
-const cli = '/Applications/Orca.app/Contents/Resources/bin/orca'
+const cli = resolveOrcaCliPath()
 const worktreeArgs = ['worktree', 'ps', '--environment', 'local', '--limit', '10000', '--json']
 function execute(args) {
   return new Promise((resolve, reject) => {
