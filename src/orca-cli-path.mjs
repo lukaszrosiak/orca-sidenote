@@ -10,3 +10,10 @@ export function resolveOrcaCliPath(platform = process.platform, env = process.en
     || win32.join(env.USERPROFILE || homedir(), 'AppData', 'Local')
   return win32.join(localAppData, 'Programs', 'orca', 'resources', 'bin', 'orca.exe')
 }
+
+export function resolveOrcaCliEnvironment(platform = process.platform, env = process.env) {
+  if (platform !== 'win32' || env.APPDATA) return env
+
+  const userProfile = env.USERPROFILE || homedir()
+  return { ...env, APPDATA: win32.join(userProfile, 'AppData', 'Roaming') }
+}
