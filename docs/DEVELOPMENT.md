@@ -2,9 +2,9 @@
 
 ## Prerequisites and setup
 
-This setup targets a local macOS development folder. Install Git, Orca, Node.js 22 or later, and npm. Start Orca. The [manifest](../orca-plugin.json) states the Orca compatibility requirement.
+This setup targets a local development folder. Install Git, Orca, Node.js 22 or later, and npm. Start Orca. The [manifest](../orca-plugin.json) states the Orca compatibility requirement.
 
-The worker requires `/Applications/Orca.app/Contents/Resources/bin/orca`, even if another `orca` executable exists. The commands below use that path.
+The worker uses Orca's bundled CLI: `/Applications/Orca.app/Contents/Resources/bin/orca` on macOS and `%LOCALAPPDATA%\Programs\orca\resources\bin\orca.exe` with the default Windows installer. The commands below use the macOS path.
 
 Clone the repository and enter it:
 
